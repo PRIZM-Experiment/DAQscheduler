@@ -1,0 +1,135 @@
+logging:
+  level: 20
+  directory: ./logs/
+
+runs:
+  run-1:
+    time:
+      start: 07-02-2022 00:00:00
+      end: 07-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffffff
+      directories:
+        top: /home/pi/shift_test_0xffffffff
+  run-2:
+    time:
+      start: 08-02-2022 00:00:00
+      end: 08-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffffe
+      directories:
+        top: /home/pi/shift_test_0xfffffffe
+  run-3:
+    time:
+      start: 09-02-2022 00:00:00
+      end: 09-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffffc
+      directories:
+        top: /home/pi/shift_test_0xfffffffc
+  run-4:
+    time:
+      start: 10-02-2022 00:00:00
+      end: 10-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffff8
+      directories:
+        top: /home/pi/shift_test_0xfffffff8
+  run-5:
+    time:
+      start: 11-02-2022 00:00:00
+      end: 11-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffff0
+      directories:
+        top: /home/pi/shift_test_0xfffffff0
+  run-6:
+    time:
+      start: 12-02-2022 00:00:00
+      end: 12-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffffe0
+      directories:
+        top: /home/pi/shift_test_0xffffffe0
+  run-7:
+    time:
+      start: 13-02-2022 00:00:00
+      end: 13-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffffc0
+      directories:
+        top: /home/pi/shift_test_0xffffffc0
+  run-8:
+    time:
+      start: 14-02-2022 00:00:00
+      end: 14-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffff80
+      directories:
+        top: /home/pi/shift_test_0xffffff80
+  run-9:
+    time:
+      start: 15-02-2022 00:00:00
+      end: 15-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffff00
+      directories:
+        top: /home/pi/shift_test_0xffffff00
+  run-10:
+    time:
+      start: 16-02-2022 00:00:00
+      end: 16-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffe00
+      directories:
+        top: /home/pi/shift_test_0xfffffe00
+  run-11:
+    time:
+      start: 17-02-2022 00:00:00
+      end: 17-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffffc00
+      directories:
+        top: /home/pi/shift_test_0xfffffc00
+  run-12:
+    time:
+      start: 18-02-2022 00:00:00
+      end: 18-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffff800
+      directories:
+        top: /home/pi/shift_test_0xfffff800
+  run-13:
+    time:
+      start: 19-02-2022 00:00:00
+      end: 19-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xfffff000
+      directories:
+        top: /home/pi/shift_test_0xfffff000
+  run-14:
+    time:
+      start: 20-02-2022 00:00:00
+      end: 20-02-2022 23:55:00
+    new-parameters:
+      snap-board:
+        fft-shift: 0xffffe000
+      directories:
+        top: /home/pi/shift_test_0xffffe000
+
+configuration-file: /home/pi/prizm_daq/config_70_interferometer.yaml
+
+cmd: /home/pi/prizm_daq/prizm_daq.py {configuration-file}
