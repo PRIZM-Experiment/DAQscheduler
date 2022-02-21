@@ -81,12 +81,15 @@ if __name__ == '__main__':
         start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
         end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
 
-        temp_parameters = config_parameters.copy()
-        recursive_replace(parameters["runs"][run]["new-parameters"], temp_parameters)
-        temp_config_file = "temp_config_"+run+".yaml"
-
-        with open(temp_config_file, "w") as temp:
-            yaml.dump(temp_parameters, temp, default_flow_style=False)
+        temp_config_file = None
+        if "new-parameters" in parameters["runs"][run].keys():
+            temp_parameters = config_parameters.copy()
+            recursive_replace(parameters["runs"][run]["new-parameters"], temp_parameters)
+            temp_config_file = "temp_config_"+run+".yaml"
+            with open(temp_config_file, "w") as temp:
+                yaml.dump(temp_parameters, temp, default_flow_style=False)
+        else:
+            temp_config_file = parameters["configuration-file"]
 
         updated_cmd = parameters["cmd"].replace("{configuration-file}", temp_config_file)
 
