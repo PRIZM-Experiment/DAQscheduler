@@ -59,9 +59,12 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     logger.setLevel(parameters["logging"]["level"])
     log_formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s", "%d-%m-%Y %H:%M:%S")
-    if not os.path.isdir(parameters["logging"]["directory"]):
-        os.makedirs(parameters["logging"]["directory"])
-    log_handler = logging.FileHandler(parameters["logging"]["directory"]+"/scheduler/"+datetime.datetime.now().strftime("%d%m%Y_%H%M%S")+".log")
+    if parameters["logging"]["directory"] == None:
+        log_handler = logging.StreamHandler()
+    else:
+        if not os.path.isdir(parameters["logging"]["directory"]):
+            os.makedirs(parameters["logging"]["directory"])
+        log_handler = logging.FileHandler(parameters["logging"]["directory"]+"/scheduler/"+datetime.datetime.now().strftime("%d%m%Y_%H%M%S")+".log")
     log_handler.setFormatter(log_formatter)
     log_handler.setLevel(parameters["logging"]["level"])
     logger.addHandler(log_handler)
