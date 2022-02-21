@@ -1,7 +1,10 @@
 import argparse
 import subprocess
 import datetime
-#import oyaml as yaml
+try:
+    import oyaml as yaml
+except ImportError:
+    import yaml
 import yaml
 import time
 import logging
