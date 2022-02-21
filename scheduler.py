@@ -20,6 +20,7 @@ def recursive_replace(old_dict, new_dict):
             new_dict[key] = value    
 # ----------------------------------------------------------------------------------------------------------------------------                
 def timestamp(dt):
+    """ Return the total number of seconds since the UNIX epoch, i.e 1970-01-01 """
     return (dt-datetime.datetime(1970, 1, 1, 0, 0, 0)).total_seconds()
 # ----------------------------------------------------------------------------------------------------------------------------
 def run_process(cmd, end_timestamp):
@@ -46,10 +47,12 @@ if __name__ == '__main__':
     parser.add_argument("configfile", help="yaml file containing albaboss configuration parameters")
     args=parser.parse_args()
 
+    # Read parameters from configuaration file
     parameters=None
     with open(args.configfile, 'r') as cf:
         parameters=yaml.load(cf.read())
 
+    # Setup logging
     logger = logging.getLogger()
     logger.setLevel(parameters["logging"]["level"])
     log_formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s", "%d-%m-%Y %H:%M:%S")
@@ -70,17 +73,23 @@ if __name__ == '__main__':
     runs = parameters["runs"].keys()
     runs.sort(key=lambda val: int(val[val.find("-")+1:]))
 
+    # Loop through each run
     for run in runs:
         start_time = None
         end_time = None
         runtime = None
 
+        # Check if the 'time' key in a run is a dict or not. If it is, look for
+        # start and end times. Else, the 'time' is the runtime of the 'cmd'
         if isinstance(parameters["runs"][run]["time"], dict):
             start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
             end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
         else:
             runtime = parameters["runs"][run]["time"]
 
+        # Check for the "new-parameters" key. If found, replace the old
+        # parameters with the new parameters then store it in a new configuration
+        # file for the run. Else, use the original configuration file.
         if "new-parameters" in parameters["runs"][run].keys():
             config_parameters = None
             with open(parameters["configuration-file"], 'r') as cf:
