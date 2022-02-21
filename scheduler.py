@@ -74,33 +74,30 @@ if __name__ == '__main__':
     with open(parameters["configuration-file"], 'r') as cf:
         config_parameters = yaml.load(cf.read())
 
-    if "runs" in parameters.keys():
-        runs = parameters["runs"].keys()
-        runs.sort(key=lambda val: int(val[val.find("-")+1:]))
+    runs = parameters["runs"].keys()
+    runs.sort(key=lambda val: int(val[val.find("-")+1:]))
 
-        for run in runs:
-            start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
-            end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
+    for run in runs:
+        start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
+        end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
 
-            temp_parameters = config_parameters.copy()
-            recursive_replace(parameters["runs"][run]["new-parameters"], temp_parameters)
-            temp_config_file = "temp_config_"+run+".yaml"
+        temp_parameters = config_parameters.copy()
+        recursive_replace(parameters["runs"][run]["new-parameters"], temp_parameters)
+        temp_config_file = "temp_config_"+run+".yaml"
 
-            with open(temp_config_file, "w") as temp:
-                yaml.dump(temp_parameters, temp, default_flow_style=False)
+        with open(temp_config_file, "w") as temp:
+            yaml.dump(temp_parameters, temp, default_flow_style=False)
 
-            updated_cmd = parameters["cmd"].replace("{configuration-file}", temp_config_file)
+        updated_cmd = parameters["cmd"].replace("{configuration-file}", temp_config_file)
 
-            if time.time() < timestamp(start_time):
-                logger.info("Current time is '{}' which is less than the start time '{}' for {}".format(datetime.datetime.now(), start_time, run))
-                logger.info("Sleeping for {} seconds".format(timestamp(start_time)-time.time()))
-                time.sleep(timestamp(start_time)-time.time())
-                logger.info("Starting {}".format(run))
-                run_process(updated_cmd, start_time, end_time)
-            elif time.time() > timestamp(end_time):
-                logger.info("The time to begin {} has passed. Skipping".format(run))
-            else:
-                logger.info("Starting {}".format(run))
-                run_process(updated_cmd, start_time, end_time)
-    else:
-        pass
+        if time.time() < timestamp(start_time):
+            logger.info("Current time is '{}' which is less than the start time '{}' for {}".format(datetime.datetime.now(), start_time, run))
+            logger.info("Sleeping for {} seconds".format(timestamp(start_time)-time.time()))
+            time.sleep(timestamp(start_time)-time.time())
+            logger.info("Starting {}".format(run))
+            run_process(updated_cmd, start_time, end_time)
+        elif time.time() > timestamp(end_time):
+            logger.info("The time to begin {} has passed. Skipping".format(run))
+        else:
+            logger.info("Starting {}".format(run))
+            run_process(updated_cmd, start_time, end_time)
