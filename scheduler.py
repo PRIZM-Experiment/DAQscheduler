@@ -72,8 +72,15 @@ if __name__ == '__main__':
     runs.sort(key=lambda val: int(val[val.find("-")+1:]))
 
     for run in runs:
-        start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
-        end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
+        start_time = None
+        end_time = None
+        runtime = None
+
+        if isinstance(parameters["runs"][run]["time"], dict):
+            start_time = datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
+            end_time = datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
+        else:
+            runtime = parameters["runs"][run]["time"]
 
         if "new-parameters" in parameters["runs"][run].keys():
             config_parameters = None
@@ -89,12 +96,16 @@ if __name__ == '__main__':
         updated_cmd = parameters["cmd"].replace("{configuration-file}", temp_config_file)
 
         time_now = time.time()
-        if time_now < timestamp(start_time):
-            sleep_time = timestamp(start_time)-time_now
-            logger.info("Current time is '{}' which is less than the start time '{}' for {}".format(datetime.datetime.now(), start_time, run))
-            logger.info("Sleeping for {} seconds".format(sleep_time))
-            time.sleep(sleep_time)
-            logger.info("Starting {}".format(run))
-            run_process(updated_cmd, timestamp(end_time))
+        if runtime == None:
+            if time_now < timestamp(start_time):
+                sleep_time = timestamp(start_time)-time_now
+                logger.info("Current time is '{}' which is less than the start time '{}' for {}".format(datetime.datetime.now(), start_time, run))
+                logger.info("Sleeping for {} seconds".format(sleep_time))
+                time.sleep(sleep_time)
+                logger.info("Starting {}".format(run))
+                run_process(updated_cmd, timestamp(end_time))
+            else:
+                logger.info("The time to begin {} has passed. Skipping".format(run))
         else:
-            logger.info("The time to begin {} has passed. Skipping".format(run))
+            logger.info("Starting {}".format(run))
+            run_process(updated_cmd, time_now+runtime)
