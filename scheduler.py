@@ -70,10 +70,6 @@ if __name__ == '__main__':
     logger.info("-------------------- DAQ autorun ---------------------")
     logger.info("------------------------------------------------------")
 
-    config_parameters = None
-    with open(parameters["configuration-file"], 'r') as cf:
-        config_parameters = yaml.load(cf.read())
-
     runs = parameters["runs"].keys()
     runs.sort(key=lambda val: int(val[val.find("-")+1:]))
 
@@ -81,13 +77,14 @@ if __name__ == '__main__':
         start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
         end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
 
-        temp_config_file = None
         if "new-parameters" in parameters["runs"][run].keys():
-            temp_parameters = config_parameters.copy()
-            recursive_replace(parameters["runs"][run]["new-parameters"], temp_parameters)
+            config_parameters = None
+            with open(parameters["configuration-file"], 'r') as cf:
+                config_parameters = yaml.load(cf.read())
+            recursive_replace(parameters["runs"][run]["new-parameters"], config_parameters)
             temp_config_file = "temp_config_"+run+".yaml"
             with open(temp_config_file, "w") as temp:
-                yaml.dump(temp_parameters, temp, default_flow_style=False)
+                yaml.dump(config_parameters, temp, default_flow_style=False)
         else:
             temp_config_file = parameters["configuration-file"]
 
