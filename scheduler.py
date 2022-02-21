@@ -47,7 +47,6 @@ if __name__ == '__main__':
     args=parser.parse_args()
 
     parameters=None
-
     with open(args.configfile, 'r') as cf:
         parameters=yaml.load(cf.read())
 
@@ -77,8 +76,8 @@ if __name__ == '__main__':
         runtime = None
 
         if isinstance(parameters["runs"][run]["time"], dict):
-            start_time = datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
-            end_time = datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
+            start_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["start"], "%d-%m-%Y %H:%M:%S")
+            end_time = datetime.datetime.strptime(parameters["runs"][run]["time"]["end"], "%d-%m-%Y %H:%M:%S")
         else:
             runtime = parameters["runs"][run]["time"]
 
