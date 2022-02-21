@@ -22,18 +22,13 @@ def recursive_replace(old_dict, new_dict):
 def timestamp(dt):
     return (dt-datetime.datetime(1970, 1, 1, 0, 0, 0)).total_seconds()
 # ----------------------------------------------------------------------------------------------------------------------------
-def run_process(cmd, start_time, end_time):
-    start_timestamp = timestamp(start_time)
-    end_timestamp = timestamp(end_time)
-
-    now = time.time()
-    
+def run_process(cmd, end_timestamp):
     process = subprocess.Popen(cmd.split())
 
     logger.info("Command '{}' started with pid {}".format(cmd, process.pid))
     
     while process.poll() == None:
-        if not(time.time()-start_timestamp <= end_timestamp-now):
+        if not(time.time() <= end_timestamp):
             process.terminate()
         time.sleep(0.1)
 
@@ -100,6 +95,6 @@ if __name__ == '__main__':
             logger.info("Sleeping for {} seconds".format(sleep_time))
             time.sleep(sleep_time)
             logger.info("Starting {}".format(run))
-            run_process(updated_cmd, start_time, end_time)
+            run_process(updated_cmd, timestamp(end_time))
         else:
             logger.info("The time to begin {} has passed. Skipping".format(run))
