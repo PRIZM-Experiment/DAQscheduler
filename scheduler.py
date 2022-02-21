@@ -93,14 +93,13 @@ if __name__ == '__main__':
 
         updated_cmd = parameters["cmd"].replace("{configuration-file}", temp_config_file)
 
-        if time.time() < timestamp(start_time):
+        time_now = time.time()
+        if time_now < timestamp(start_time):
+            sleep_time = timestamp(start_time)-time_now
             logger.info("Current time is '{}' which is less than the start time '{}' for {}".format(datetime.datetime.now(), start_time, run))
-            logger.info("Sleeping for {} seconds".format(timestamp(start_time)-time.time()))
-            time.sleep(timestamp(start_time)-time.time())
+            logger.info("Sleeping for {} seconds".format(sleep_time))
+            time.sleep(sleep_time)
             logger.info("Starting {}".format(run))
             run_process(updated_cmd, start_time, end_time)
-        elif time.time() > timestamp(end_time):
-            logger.info("The time to begin {} has passed. Skipping".format(run))
         else:
-            logger.info("Starting {}".format(run))
-            run_process(updated_cmd, start_time, end_time)
+            logger.info("The time to begin {} has passed. Skipping".format(run))
