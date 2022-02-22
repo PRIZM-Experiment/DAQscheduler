@@ -61,7 +61,7 @@ if __name__ == '__main__':
     else:
         if not os.path.isdir(parameters["logging"]["directory"]):
             os.makedirs(parameters["logging"]["directory"])
-        log_handler = logging.FileHandler(parameters["logging"]["directory"]+"/scheduler/"+datetime.datetime.now().strftime("%d%m%Y_%H%M%S")+".log")
+        log_handler = logging.FileHandler(parameters["logging"]["directory"]+"/"+datetime.datetime.now().strftime("%d%m%Y_%H%M%S")+".log")
     log_handler.setFormatter(log_formatter)
     log_handler.setLevel(parameters["logging"]["level"])
     logger.addHandler(log_handler)
